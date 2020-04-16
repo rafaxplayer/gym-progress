@@ -1,0 +1,24 @@
+<app-header></app-header>
+<ion-content class="ion-padding">
+    <mat-card class="ion-margin-bottom">
+        <mat-card-header>
+            <mat-card-title>Buscar ejercicio</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-form-field appearance="legacy" class="ion-padding">
+                <mat-label position="stacked">Grupo Muscular</mat-label>
+                <mat-select (selectionChange)="onChangeMgroup($event)" placeholder="Selecciona un Grupo muscular">
+                    <mat-option *ngFor="let gr of m_groups" [value]="gr.id">{{ gr.name | titlecase }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="legacy" class="ion-padding">
+                <mat-label position="stacked">Nombre del ejercicio</mat-label>
+                <mat-select (selectionChange)="onChangeExercise($event)" placeholder="Selecciona un Grupo muscular">
+                    <mat-option *ngFor="let ex of exercises" [value]="ex.id">{{ ex.name | titlecase }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-card-content>
+    </mat-card>
+
+    <detalle-entreno *ngFor="let entreno of entrenos" [entreno]="entreno"></detalle-entreno>
+</ion-content>

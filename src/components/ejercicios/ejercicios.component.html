@@ -1,0 +1,16 @@
+<div class="ion-padding">
+    <mat-form-field appearance="legacy">
+        <mat-label>Filtrar por Grupo Muscular</mat-label>
+        <mat-select (selectionChange)="onChangeMgroup($event)" placeholder="Filtrar por grupo muscular">
+            <mat-option [value]="0">Todas</mat-option>
+            <mat-option *ngFor="let gr of m_groups" [value]="gr.id">{{ gr.name | titlecase }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-action-list>
+        <mat-list-item *ngFor="let ex of exercises" (click)="goActions(ex)">
+            <mat-label>{{ ex.name | titlecase }} ( {{ex.muscle_name}} )</mat-label>
+            <mat-divider></mat-divider>
+        </mat-list-item>
+    </mat-action-list>
+
+</div>

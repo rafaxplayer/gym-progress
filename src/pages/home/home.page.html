@@ -1,0 +1,25 @@
+<app-header></app-header>
+<ion-content #content [scrollEvents]="true" (ionScroll)="logScrolling($event)">
+    <div class="ion-padding ion-text-center">
+        <button [disabled]="isToday" mat-raised-button class="btn-icon-left" (click)="today()">
+            <mat-icon>today</mat-icon>
+            Hoy
+        </button>
+    </div>
+    <div class="ion-padding ion-text-center"><label><b>{{ calendarTitle | titlecase }}</b></label></div>
+    <div class="ion-padding">
+        <calendar [locale]="calendar.locale" (onTitleChanged)="onViewTitleChanged($event)" [eventSource]="entrenosEvent" [showEventDetail]="false" [calendarMode]="calendar.mode" [currentDate]="calendar.currentDate" (onCurrentDateChanged)="onCurrentDateChanged($event)"
+            [startingDayMonth]="1">
+        </calendar>
+    </div>
+    <div id="entrenos-content" class="ion-padding ion-margin-bottom ion-text-center">
+        <label *ngIf="entrenos.length > 0" class="title_border ion-margin-bottom">Entrenos</label>
+        <detalle-entreno *ngFor="let entreno of entrenos" [entreno]="entreno"></detalle-entreno>
+    </div>
+    <ion-button #buttonUp icon-only class="arrou-up-button" (click)="scrollToTop()">
+        <ion-icon name="arrow-up"></ion-icon>
+    </ion-button>
+    <ion-fab-button class="fab-button" color="primary" (click)="newTraining()">
+        <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+</ion-content>
