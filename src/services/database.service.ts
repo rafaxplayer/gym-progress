@@ -50,11 +50,7 @@ export class DatabaseService {
 
           this.database = db
           this.seedDatabase()
-          /* this.createTables().then(() => {
-            this.dbReady.next(true);
-            this.loadAll();
-           
-          }).catch(e => console.log('Error executing creation Tables: ' + JSON.stringify(e)));  */ 
+          
         }).catch(e => console.log('Error executing creation SQL: ' + JSON.stringify(e)));
 
     });
@@ -119,7 +115,7 @@ export class DatabaseService {
     this.isReady().then(() => {
       return this.database.executeSql(query, [date]).then(data => {
         let trainings: Training[] = [];
-        console.log(data.rows)
+       
         if (data.rows.length > 0) {
           for (var i = 0; i < data.rows.length; i++) {
             trainings.push({
@@ -303,7 +299,7 @@ export class DatabaseService {
     this.isReady().then(() => {
       let query = `SELECT exercises.id, exercises.name, exercises.muscle_group_id, muscle_groups.name AS muscle_name FROM exercises INNER JOIN muscle_groups ON exercises.muscle_group_id = muscle_groups.id ORDER BY exercises.name`;
       if (muscle_g_id > 0) {
-        query = `SELECT exercises.id, exercises.name, exercises.muscle_group_id, muscle_groups.name AS muscle_name FROM exercises INNER JOIN muscle_groups ON exercises.muscle_group_id = muscle_groups.id WHERE exercises.muscle_group_id=${muscle_g_id} ORDER BY exercises.name`;
+        query = `SELECT exercises.id, exercises.name, exercises.muscle_group_id, muscle_groups.name AS muscle_name FROM exercises INNER JOIN muscle_groups ON exercises.muscle_group_id = muscle_groups.id WHERE exercises.muscle_group_id=${ muscle_g_id } ORDER BY exercises.name`;
       }
 
       return this.database.executeSql(query, []).then(data => {

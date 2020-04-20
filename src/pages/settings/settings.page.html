@@ -1,31 +1,40 @@
 <app-header></app-header>
 <ion-content class="ion-padding">
-    <mat-expansion-panel>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
+    <ion-card>
+        <ion-card-header (click)="collapseCard1 = !collapseCard1">
+            <ion-card-title>
                 Grupos musculares
-            </mat-panel-title>
-        </mat-expansion-panel-header>
-        <nuevo-grupo-muscular></nuevo-grupo-muscular>
-        <mat-divider></mat-divider>
-        <grupos-musculares></grupos-musculares>
-    </mat-expansion-panel>
-    <mat-expansion-panel>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
+            </ion-card-title>
+            <ion-icon src="assets/svg-app/{{collapseCard1 ? 'chevron-up-outline.svg': 'chevron-down-outline.svg'}}"></ion-icon>
+        </ion-card-header>
+        <ion-card-content *ngIf="collapseCard1">
+            <nuevo-grupo-muscular></nuevo-grupo-muscular>
+            <div class="divider"></div>
+            <grupos-musculares></grupos-musculares>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-header (click)="collapseCard2=!collapseCard2">
+            <ion-card-title>
                 Ejercicios
-            </mat-panel-title>
-        </mat-expansion-panel-header>
-        <nuevo-ejercicio></nuevo-ejercicio>
-        <mat-divider></mat-divider>
-        <ejercicios></ejercicios>
-    </mat-expansion-panel>
-    <mat-expansion-panel>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
+            </ion-card-title>
+            <ion-icon color="secondary" src="assets/svg-app/{{collapseCard2 ? 'chevron-up-outline.svg': 'chevron-down-outline.svg'}}"></ion-icon>            
+        </ion-card-header>
+        <ion-card-content *ngIf="collapseCard2">
+            <nuevo-ejercicio></nuevo-ejercicio>
+            <div class="divider"></div>
+            <ejercicios></ejercicios>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-header (click)="collapseCard3=!collapseCard3">
+            <ion-card-title>
                 Entrenamientos
-            </mat-panel-title>
-        </mat-expansion-panel-header>
-        <entrenos></entrenos>
-    </mat-expansion-panel>
+            </ion-card-title>
+            <ion-icon src="assets/svg-app/{{collapseCard3 ? 'chevron-up-outline.svg': 'chevron-down-outline.svg'}}"></ion-icon>
+        </ion-card-header>
+        <ion-card-content *ngIf="collapseCard3">
+            <entrenos></entrenos>
+        </ion-card-content>
+    </ion-card>
 </ion-content>

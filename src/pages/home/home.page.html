@@ -1,12 +1,14 @@
 <app-header></app-header>
 <ion-content #content [scrollEvents]="true" (ionScroll)="logScrolling($event)">
     <div class="ion-padding ion-text-center">
-        <button [disabled]="isToday" mat-raised-button class="btn-icon-left" (click)="today()">
-            <mat-icon>today</mat-icon>
+        <ion-button [disabled]="isToday" color="dark" (click)="today()">
+            <ion-icon slot="start" src="assets/svg-app/today-outline.svg"></ion-icon>
             Hoy
-        </button>
+        </ion-button>
     </div>
-    <div class="ion-padding ion-text-center"><label><b>{{ calendarTitle | titlecase }}</b></label></div>
+    <div class="ion-padding ion-text-center">
+        <label><b>{{ calendarTitle | titlecase }}</b></label>
+    </div>
     <div class="ion-padding">
         <calendar [locale]="calendar.locale" (onTitleChanged)="onViewTitleChanged($event)" [eventSource]="entrenosEvent" [showEventDetail]="false" [calendarMode]="calendar.mode" [currentDate]="calendar.currentDate" (onCurrentDateChanged)="onCurrentDateChanged($event)"
             [startingDayMonth]="1">

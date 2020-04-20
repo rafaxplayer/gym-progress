@@ -8,7 +8,6 @@ import { ItemOpacity } from '../../app/app-animations';
 @Component({
   selector: 'detalle-entreno',
   templateUrl: './detalle-entreno.component.html',
-  styleUrls: ['./detalle-entreno.component.scss'],
   animations:ItemOpacity
 })
 export class DetalleEntrenoComponent implements OnInit {

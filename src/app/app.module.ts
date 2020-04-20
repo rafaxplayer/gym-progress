@@ -20,9 +20,11 @@ import { ComponentsModule } from '../components/components.module';
 import { DatabaseService } from '../services/database.service';
 import { DialogsService } from '../services/dialogs.service';
 import { UtilsService } from '../services/utils.service';
+import { EventsService } from '../services/events.service';
 
 import { registerLocaleData } from '@angular/common';
 import localeZh from '@angular/common/locales/es';
+
 registerLocaleData(localeZh);
 
 @NgModule({
@@ -38,6 +40,7 @@ registerLocaleData(localeZh);
     DatabaseService,
     DialogsService ,
     UtilsService,
+    EventsService,
     {provide: LOCALE_ID, useValue: 'es'}
   ],
   exports:[],

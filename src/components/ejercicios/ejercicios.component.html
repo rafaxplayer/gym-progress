@@ -1,16 +1,12 @@
 <div class="ion-padding">
-    <mat-form-field appearance="legacy">
-        <mat-label>Filtrar por Grupo Muscular</mat-label>
-        <mat-select (selectionChange)="onChangeMgroup($event)" placeholder="Filtrar por grupo muscular">
-            <mat-option [value]="0">Todas</mat-option>
-            <mat-option *ngFor="let gr of m_groups" [value]="gr.id">{{ gr.name | titlecase }}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-action-list>
-        <mat-list-item *ngFor="let ex of exercises" (click)="goActions(ex)">
-            <mat-label>{{ ex.name | titlecase }} ( {{ex.muscle_name}} )</mat-label>
-            <mat-divider></mat-divider>
-        </mat-list-item>
-    </mat-action-list>
-
+    <ion-label position="stacked" class="tiny-text ion-margin-bottom">Filtrar por Grupo Muscular</ion-label>
+    <ion-select class="ion-margin-bottom" placeholder="Selecciona un Grupo muscular" multiple="false" interface="action-sheet" (ionChange)="onChangeMgroup($event)">
+        <ion-select-option value="0">Todos</ion-select-option>
+        <ion-select-option *ngFor="let gr of m_groups" value="{{gr.id}}">{{ gr.name | titlecase }}</ion-select-option>
+    </ion-select>
+    <ion-list lines="inset">
+        <ion-item *ngFor="let ex of exercises" (click)="goActions(ex)">
+            <ion-label>{{ ex.name | titlecase }} ({{ ex.muscle_name }})</ion-label>
+        </ion-item>
+    </ion-list>
 </div>

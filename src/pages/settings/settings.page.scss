@@ -1,3 +1,20 @@
-.mat-expansion-panel {
-    margin-top: 16px !important;
+ion-card{
+    padding: 0 !important;
+    --background:#131111c7!important;
+   
 }
+
+ion-icon{
+    color:white;
+    
+}
+
+ion-card-header{
+    font-size: 16px;
+    background-color: #101010;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+

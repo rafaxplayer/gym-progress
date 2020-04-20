@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { IDeactivatableComponent } from 'src/services/can-deactivate-guard.service';
 import { EntrenosComponent } from 'src/components/entrenos/entrenos.component';
 import { UtilsService } from '../../services/utils.service';
+import { log } from 'util';
 
 @Component({
   selector: 'entreno',
@@ -34,28 +35,14 @@ export class EntrenoPage implements OnInit, IDeactivatableComponent{
 
   exercises: Exercise[] = [];
 
-  subscriptions:Subscription[]=[];
+  subscriptionGroups:Subscription;
+  subscriptionExercises:Subscription;
 
-  constructor(public modalCtrl:ModalController,private Router:Router, private activatedRoute: ActivatedRoute, private database: DatabaseService, private dialogsService:DialogsService, private utils:UtilsService) {
+  pickerOptions: any = {
+    mode: "md",
+  };
 
-    this.activatedRoute.queryParams.subscribe(params => {
-         
-        this.training.date = params.date;
-
-        if(params.training){
-
-          let trn = JSON.parse(params.training);
-          this.training.id = trn.id;
-          this.training.date = trn.date;
-          this.training.exercise_id = trn.exercise_id;
-          this.training.muscle_group_id = trn.muscle_group_id;
-          this.training.series = JSON.parse(trn.series);
-          this.training.comment = trn.comment;
-
-        }
-     
-    });
-  }
+  constructor(public modalCtrl:ModalController,private Router:Router, private activatedRoute: ActivatedRoute, private database: DatabaseService, private dialogsService:DialogsService, private utils:UtilsService) {}
 /* Implenetacion del servicio para prevenir salir sin guardar cambios*/
   async canDeactivate() {
     
@@ -71,22 +58,46 @@ export class EntrenoPage implements OnInit, IDeactivatableComponent{
 
   ngOnInit(): void {
     this.editData = false;
+    console.log(this.training)
   }
-
+  
   ionViewWillEnter(){
-    this.subscriptions.push(this.database.getMuscleGroups().subscribe((m_g: Muscle_Group[]) => {
+    console.log("ionViweWillEnter")
+    this.subscriptionGroups = this.database.getMuscleGroups().subscribe((m_g: Muscle_Group[]) => {
       this.m_groups = m_g;
-    }));
+      console.log("Change M Groups",JSON.stringify(this.m_groups))
+      this.training.muscle_group_id = this.m_groups.length> 0 ? this.m_groups[0].id:0
+    });
 
-    this.subscriptions.push(this.database.getExercises().subscribe((ex: Exercise[]) => {
+    this.subscriptionExercises = this.database.getExercises().subscribe((ex: Exercise[]) => {
       this.exercises = ex;
-    }));
+      console.log("Change Exercises",JSON.stringify(this.exercises))
+     
+      this.training.exercise_id = this.exercises.length > 0 ?this.exercises[0].id:0
+    });
+
+    this.activatedRoute.queryParams.subscribe(params => {
+         
+      this.training.date = params.date;
+
+      if(params.training){
+        let trn = JSON.parse(params.training);
+        this.training.id = trn.id;
+        this.training.date = trn.date;
+        this.training.exercise_id = trn.exercise_id;
+        this.training.muscle_group_id = trn.muscle_group_id;
+        this.training.series = JSON.parse(trn.series);
+        this.training.comment = trn.comment;
+
+      }
+   
+  });
+
   }
 
   ionViewDidLeave(){
-    this.subscriptions.forEach((subs)=>{
-      subs.unsubscribe();
-    });
+    this.subscriptionGroups.unsubscribe()
+    this.subscriptionExercises.unsubscribe()
     this.resetData();
   }
 
@@ -94,24 +105,24 @@ export class EntrenoPage implements OnInit, IDeactivatableComponent{
     this.content.scrollToBottom(300);
   }
 
-  onChangeDate($event:any){
-    
-    if($event.value != undefined){
-      this.training.date = this.utils.formatYMD(new Date($event.value));
+  onChangeDate(event:any){
+    if(event.detail.value != undefined){
+      this.training.date = this.utils.formatYMD(new Date(event.detail.value));
     } 
   }
 
-  onChangeMgroup($event:any) {
-    this.training.muscle_group_id = $event.value == undefined ? 0 : $event.value;
-
+  onChangeMgroup(event) {
+    console.log("On Select Change G:",event)
+    this.training.muscle_group_id = event.detail.value == undefined ? 0 : event.detail.value;
     if (this.training.muscle_group_id > 0){
       this.database.loadExercises(this.training.muscle_group_id);
     }
     this.editData = true;
   }
   
-  onChangeExercise(event:any) {
-    this.training.exercise_id = event.value == undefined ? 0 : event.value;
+  onChangeExercise(event) {
+    console.log("On Select Change E:",event)
+    this.training.exercise_id = event.detail.value == undefined ? 0 : event.detail.value;
     this.editData = true;
   }
 

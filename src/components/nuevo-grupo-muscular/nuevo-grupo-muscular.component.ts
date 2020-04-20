@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
-import { ModalController } from '@ionic/angular';
 import { DialogsService } from 'src/services/dialogs.service';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
 
@@ -14,53 +13,47 @@ export class NuevoGrupoMuscularComponent {
 
   groupName: string = "";
 
-  groupImg: string = "assets/muscle_placeholder.png";
+  groupImg: string = "assets/muscle-img/muscle_placeholder.png";
 
-  constructor(private database: DatabaseService,private dialogsService:DialogsService, private imgPicker:ImagePicker) { }
+  constructor(private database: DatabaseService, private dialogsService: DialogsService, private imgPicker: ImagePicker) { }
 
   saveGroup() {
 
-    if(this.groupName === "" ){
-      this.dialogsService.dialogOk('Error','Establece un nombre para el grupo','Ok');
+    if (this.groupName === "") {
+      this.dialogsService.dialogOk('Error', 'Establece un nombre para el grupo', 'Ok');
       return;
     }
 
     if (this.groupId > 0) {
-      
-      this.database.updateData("muscle_groups",[this.groupName,this.groupImg, this.groupId]).then(() => {
-        this.dialogsService.dialogOk('Ok','Actualizado !!!','Ok');
+
+      this.database.updateData("muscle_groups", [this.groupName, this.groupImg, this.groupId]).then(() => {
+        this.dialogsService.dialogOk('Ok', 'Actualizado !!!', 'Ok');
         this.resetData();
         this.dialogsService.closeModal();
-      }).catch(e => this.dialogsService.dialogOk(":( Ups!!",`Ocurrio un error:  ${JSON.stringify(e)}+++
-      3--------------------------------------------------------------------------------------------------------`,"Ok"))
-      
+      }).catch(e => this.dialogsService.dialogOk(":( Ups!!", `Ocurrio un error:  ${JSON.stringify(e)}`, "Ok"))
+
     } else {
-      this.database.addData("muscle_groups",[this.groupName,this.groupImg]).then(() => {
-        this.dialogsService.dialogOk('Ok','Guardado !!!','Ok');
+      this.database.addData("muscle_groups", [this.groupName, this.groupImg]).then(() => {
+        this.dialogsService.dialogOk('Ok', 'Guardado !!!', 'Ok');
         this.resetData();
-      }).catch(e => this.dialogsService.dialogOk(":( Ups!!",`Ocurrio un error: es posible que hayas repetido el nombre`,"Ok"))
+      }).catch(e => this.dialogsService.dialogOk(":( Ups!!", `Ocurrio un error: es posible que hayas repetido el nombre`, "Ok"))
     }
   }
-  newImage(){
+  newImage() {
     var options = {
       quality: 50,
       outputType: 1
     };
-    
-    this.imgPicker.getPictures(options).then((results) => {
 
-        console.log(results[0])
-        this.groupImg='data:image/jpeg;base64,' + results[0]
-      
-    }, (err) => {
-      console.log(err);
-    });
+    this.imgPicker.getPictures(options).then((results) => {
+      this.groupImg = 'data:image/jpeg;base64,' + results[0]
+    }, (err) => console.log(err));
   }
 
   resetData() {
     this.groupName = "";
     this.groupId = 0;
-    this.groupImg = "assets/muscle_placeholder.png";
+    this.groupImg = "assets/muscle-img/muscle_placeholder.png";
   }
 
 }

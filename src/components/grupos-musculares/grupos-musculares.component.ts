@@ -26,7 +26,7 @@ export class GruposMuscularesComponent implements OnInit{
   }
   
   ngOnDestroy(){
-    console.log(" Grupos : ionViewDidLeave");
+    
     this.subscription.unsubscribe();
   }
 

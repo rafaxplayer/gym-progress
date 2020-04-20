@@ -1,39 +1,36 @@
 <div style="overflow:scroll">
     <div class="ion-padding ion-justify-content-center">
-        <mat-label>Filtrar entreno por:</mat-label>
+        <ion-label>Filtrar entreno por:</ion-label>
+        <div class="divider"></div>
     </div>
-    <div class="ion-text-center">
-        <mat-form-field appearance="legacy" class="ion-padding">
-            <mat-label>Grupo Muscular</mat-label>
-            <mat-select (selectionChange)="onChangeMgroup($event)" [value]="group_id" placeholder="Selecciona un Grupo muscular">
-                <mat-option *ngFor="let gr of m_groups" [value]="gr.id">{{ gr.name | titlecase }}</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="legacy" class="ion-padding">
-            <mat-label>Ejercicio</mat-label>
-            <mat-select (selectionChange)="onChangeExercise($event)" [value]="exercise_id" placeholder="Selecciona un ejercico">
-                <mat-option *ngFor="let ex of exercises" [value]="ex.id">{{ ex.name | titlecase }}</mat-option>
-            </mat-select>
-        </mat-form-field>
+    <div class="ion-padding">
+
+        <ion-label position="stacked" class="tiny-text">Grupo Muscular</ion-label>
+        <ion-select placeholder="Selecciona un Grupo muscular" multiple="false" interface="action-sheet" (ionChange)="onChangeMgroup($event)">
+            <ion-select-option *ngFor="let gr of m_groups" value="{{gr.id}}">{{ gr.name | titlecase }}</ion-select-option>
+        </ion-select>
+
+        <ion-label position="stacked" class="tiny-text">Ejercicio</ion-label>
+        <ion-select placeholder="Seleciona Ejercicio" multiple="false" value="{{exercise_id}}" interface="action-sheet" (ionChange)="onChangeExercise($event)">
+            <ion-select-option *ngFor="let ex of exercises" value="{{ex.id}}">{{ ex.name | titlecase }}</ion-select-option>
+        </ion-select>
+
     </div>
     <div class="ion-padding ion-justify-content-center">
-        <mat-label>Filtrar entreno por fechas</mat-label>
+        <ion-label>Filtrar entreno por fechas</ion-label>
+        <div class="divider"></div>
     </div>
-    <div class="ion-text-center">
-        <mat-form-field>
-            <input matInput [matDatepicker]="picker" placeholder="Fecha de inicio" (dateChange)="onChangeInitDate($event)">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker touchUi #picker color="primary"></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput [matDatepicker]="picker2" placeholder="Fecha final" (dateChange)="onChangeEndDate($event)">
-            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-            <mat-datepicker touchUi #picker2 color="primary"></mat-datepicker>
-        </mat-form-field>
+    <div class="ion-padding">
+        
+        <ion-label position="stacked" class="tiny-text">Fecha de inicio</ion-label>
+        <ion-datetime value="{{initDate}}" doneText="Guardar" displayFormat="DD-MMM-YYYY" placeholder="Seleciona Fecha" (ionChange)="onChangeInitDate($event)"></ion-datetime>
+        
+        <ion-label position="stacked" class="tiny-text">Fecha final</ion-label>
+        <ion-datetime value="{{endDate}}" doneText="Guardar" displayFormat="DD-MMM-YYYY" placeholder="Seleciona Fecha" (ionChange)="onChangeEndDate($event)"></ion-datetime>
     </div>
-    <mat-divider></mat-divider>
-    <div class="ion-padding ion-margin-bottom ion-text-center">
-        <label class="title_border ion-padding" *ngIf="entrenos.length > 0">Entrenos</label>
+    <div class="divider"></div>
+    <div class="ion-margin-bottom ion-text-center">
+        <label class="title_border ion-padding ion-margin-vertical" *ngIf="entrenos.length > 0">Entrenos</label>
         <detalle-entreno *ngFor="let entreno of entrenos" [entreno]="entreno"></detalle-entreno>
     </div>
 </div>

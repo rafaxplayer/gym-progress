@@ -2,59 +2,47 @@
 <ion-content #content>
     <ion-row class="ion-padding ion-margin-top ion-justify-content-center ion-align-items-center">
         <label class="ion-margin-end"> Buscar</label>
-        <button mat-fab color="dark" aria-label="seleccionar entreno" (click)="searchTraining();">
-            <mat-icon>fitness_center</mat-icon>
-          </button><label class="ion-margin-start">Entreno</label>
+        <ion-fab-button color="dark" (click)="searchTraining();">
+            <ion-icon src="assets/svg-app/barbell-outline.svg"></ion-icon>
+        </ion-fab-button>
+        <label class="ion-margin-start">Entreno</label>
     </ion-row>
     <ion-row class="ion-padding ion-justify-content-center">
         <label class="title_border text_large">Entreno - Dia : {{ training.date | date:'d-M-yyy' }}</label>
     </ion-row>
-    <ion-row class="ion-padding ion-justify-content-center" *ngIf="training.id > 0">
-        <mat-form-field>
-            <input matInput [matDatepicker]="picker" placeholder="Cambiar fecha" (dateChange)="onChangeDate($event)">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker touchUi #picker color="primary"></mat-datepicker>
-        </mat-form-field>
+    <ion-row class="ion-padding" *ngIf="training.id > 0">
+        <ion-label position="stacked" class="tiny-text">Fecha <ion-text color="primary">*</ion-text></ion-label>
+        <ion-datetime value="{{training.date}}" [pickerOptions]="pickerOptions" doneText="Guardar" displayFormat="DD-MMM-YYYY" placeholder="Seleciona Fecha" (ionChange)="onChangeDate($event)"></ion-datetime>
     </ion-row>
     <ion-row class="ion-padding ">
-        <ion-col class="ion-text-end " size="9">
-            <mat-form-field appearance="legacy">
-                <mat-label>Grupo Muscular</mat-label>
-                <mat-select (selectionChange)="onChangeMgroup($event)" [value]="training.muscle_group_id > 0 ? training.muscle_group_id : 0" placeholder="Selecciona un Grupo muscular">
-                    <mat-option *ngFor="let gr of m_groups" [value]="gr.id">{{ gr.name | titlecase }}</mat-option>
-                </mat-select>
-            </mat-form-field>
+        <ion-col size="10">
+            <ion-label position="stacked"  class="tiny-text">Grupo muscular <ion-text color="primary">*</ion-text></ion-label>
+            <ion-select placeholder="Seleciona Grupo" multiple="false" value="{{training.muscle_group_id}}" interface="action-sheet" (ionChange)="onChangeMgroup($event)">
+                <ion-select-option *ngFor="let gr of m_groups" value="{{gr.id}}">{{ gr.name | titlecase }}</ion-select-option>
+            </ion-select>
         </ion-col>
-        <ion-col size="2" class="ion-text-start">
-            <button mat-mini-fab aria-label="new muscle group" class="add-icon-button" color="dark" (click)="newMuscleGroup()"> 
-                <mat-icon>add</mat-icon>
-            </button>
+        <ion-col size="2" class="ion-text-start ion-align-self-end">
+            <ion-fab-button  style="margin-bottom: 0;" size="small" color="dark" (click)="newMuscleGroup()"> 
+                <ion-icon name="add"></ion-icon>
+            </ion-fab-button>
         </ion-col>
-        <ion-col size="1"></ion-col>
     </ion-row>
     <ion-row class="ion-padding">
-        <ion-col class="ion-text-end" size-sm="9">
-            <mat-form-field appearance="legacy">
-                <mat-label>Ejercicio</mat-label>
-                <mat-select (selectionChange)="onChangeExercise($event)" [value]="training.exercise_id > 0 ? training.exercise_id : 0" placeholder="Selecciona un ejercico">
-                    <mat-option *ngFor="let ex of exercises" [value]="ex.id">{{ ex.name | titlecase }}</mat-option>
-                </mat-select>
-            </mat-form-field>
+        <ion-col size-sm="10">
+            <ion-label position="stacked" class="tiny-text">Ejercicio <ion-text color="primary">*</ion-text></ion-label>
+            <ion-select placeholder="Seleciona Ejercicio" multiple="false" value="{{training.exercise_id}}" interface="action-sheet" (ionChange)="onChangeExercise($event)">
+                <ion-select-option *ngFor="let ex of exercises" value="{{ex.id}}">{{ ex.name | titlecase }}</ion-select-option>
+            </ion-select>
         </ion-col>
-        <ion-col size="2" class="ion-text-start">
-            <button mat-mini-fab aria-label="new exercise" class="add-icon-button" color="dark" (click)="newExercise()"> 
-            <mat-icon>add</mat-icon>
-          </button>
+        <ion-col size="2" class="ion-text-start ion-align-self-end">
+          <ion-fab-button  style="margin-bottom: 0;" size="small" color="dark" (click)="newExercise()"> 
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
         </ion-col>
-        <ion-col size="1"></ion-col>
     </ion-row>
     <ion-row class="ion-padding">
-        <ion-col class="ion-text-end" size="9">
-            <mat-form-field appearance="legacy">
-                <textarea matInput placeholder="Comentarios" [(ngModel)]="training.comment"></textarea>
-            </mat-form-field>
-        </ion-col>
-        <ion-col size="3"></ion-col>
+        <ion-label position="stacked" class="tiny-text">Comentario</ion-label>
+        <ion-textarea placeholder="Introduce un comentario" [(ngModel)]="training.comment"></ion-textarea>
     </ion-row>
     <div>
         <ion-grid fixed>
@@ -62,30 +50,26 @@
                 <label class="title_border">Series</label>
             </ion-row>
             <ion-row class="ion-justify-content-center ion-padding ion-margin-bottom">
-                <button class="d-block btn-icon-left" color="primary" mat-raised-button (click)="newSerie()">
-                    <mat-icon>add</mat-icon>
+                <ion-button color="primary" (click)="newSerie()">
+                    <ion-icon slot="start" name="add"></ion-icon>
                     Añadir Serie
-                </button>
+                </ion-button>
             </ion-row>
-            <ion-row class="comp-back-color ion-padding">
+            <ion-row class="ion-padding comp_back ion-margin-horizontal ion-margin-bottom">
                 <ion-col size="5">Kg</ion-col>
                 <ion-col size="5">Repet.</ion-col>
             </ion-row>
-            <ion-row *ngFor="let serie of training.series;let i=index" class="ion-padding">
+            <ion-row *ngFor="let serie of training.series;let i=index" class="ion-padding-horizontal">
                 <ion-col size="5">
-                    <mat-form-field>
-                        <input matInput type="number" [(ngModel)]="training.series[i].kgs" min="1">
-                    </mat-form-field>
+                    <ion-input type="number" [(ngModel)]="training.series[i].kgs" min="1"></ion-input>
                 </ion-col>
                 <ion-col size="5">
-                    <mat-form-field>
-                        <input matInput type="number" [(ngModel)]="training.series[i].reps" min="1">
-                    </mat-form-field>
+                    <ion-input type="number" [(ngModel)]="training.series[i].reps" min="1"></ion-input>
                 </ion-col>
                 <ion-col size="2">
-                    <button mat-icon-button color="warn" (click)="removeSerie(i)">
-                        <mat-icon>close</mat-icon>
-                    </button>
+                    <ion-button fill="clear" color="danger" (click)="removeSerie(i)">
+                        <ion-icon slot="icon-only" src="assets/svg-app/close-outline.svg"></ion-icon>
+                    </ion-button>
                 </ion-col>
             </ion-row>
         </ion-grid>

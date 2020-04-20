@@ -58,9 +58,9 @@ export class EntrenosComponent implements OnInit {
   }
 
   onChangeMgroup($event: any) {
-    this.group_id = $event.value;
+    this.group_id = $event.detail.value;
     if (this.group_id > 0) {
-      this.database.loadExercises($event.value);
+      this.database.loadExercises(this.group_id);
       if (this.exercise_id > 0) {
         this.searchTrainings(this.group_id, this.exercise_id);
       }
@@ -68,7 +68,7 @@ export class EntrenosComponent implements OnInit {
   }
 
   onChangeExercise($event: any) {
-    this.exercise_id = $event.value;
+    this.exercise_id = $event.detail.value;
     if (this.exercise_id > 0 && this.group_id > 0) {
       this.searchTrainings(this.group_id, this.exercise_id);
     } else {
@@ -78,14 +78,14 @@ export class EntrenosComponent implements OnInit {
   }
 
   onChangeInitDate($event) {
-    if ($event.value != undefined) {
-      this.initDate = this.utils.formatYMD(new Date($event.value));
+    if ($event.detail.value != undefined) {
+      this.initDate = this.utils.formatYMD(new Date($event.detail.value));
     }
   }
 
   onChangeEndDate($event) {
-    if ($event.value != undefined) {
-      this.endDate = this.utils.formatYMD(new Date($event.value));
+    if ($event.detail.value != undefined) {
+      this.endDate = this.utils.formatYMD(new Date($event.detail.value));
       this.searchTraininsWithDates(this.initDate, this.endDate);
     }
   }

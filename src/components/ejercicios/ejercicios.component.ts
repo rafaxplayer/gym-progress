@@ -35,14 +35,14 @@ export class EjerciciosComponent implements OnInit{
   }
 
   ngOnDestroy(){
-    console.log("Ejercicos : ngOnDestroy");
+    
     this.subscriptions.forEach((sub)=>{
       sub.unsubscribe();
     });
   }
 
   onChangeMgroup(event) {
-    let muscle_group_id = event.value == undefined ? 0 : event.value;
+    let muscle_group_id = event.detail.value == undefined ? 0 : event.detail.value;
       if (muscle_group_id > 0){
         this.database.loadExercises(muscle_group_id);
       }else{

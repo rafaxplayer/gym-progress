@@ -1,9 +1,10 @@
-<ion-header>
-    <mat-toolbar color="primary">
-        <mat-toolbar-row>
-            <span (click)="goRoot()">Gym Progress</span>
-            <span class="tool-spacer"></span>
-            <mat-icon *ngIf="showButtonSettings" class="sep-icon" (click)="goSettings()">brightness_5</mat-icon>
-        </mat-toolbar-row>
-    </mat-toolbar>
+<ion-header >
+    <ion-toolbar color="primary">
+        <ion-buttons slot="end">
+            <ion-button (click)="goSettings()" *ngIf="showButtonSettings">
+                <ion-icon slot="icon-only" src="assets/svg-app/settings-outline.svg" ></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title (click)="goRoot()">Gym Progress</ion-title>
+    </ion-toolbar>
 </ion-header>

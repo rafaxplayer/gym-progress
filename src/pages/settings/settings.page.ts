@@ -8,9 +8,11 @@ import { Events } from '@ionic/angular';
 })
 export class SettingsPage {
 
-  collapseCard:boolean=true;
+  collapseCard1:boolean=false;
   
-  collapseCard2:boolean=true;
+  collapseCard2:boolean=false;
+
+  collapseCard3:boolean=false;
  
   constructor(public event: Events) { }
 

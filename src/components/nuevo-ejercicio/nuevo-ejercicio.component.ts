@@ -1,7 +1,6 @@
 import { DialogsService } from './../../services/dialogs.service';
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService, Muscle_Group } from '../../services/database.service';
-import { ModalController } from '@ionic/angular';
 import { NuevoGrupoMuscularComponent } from '../nuevo-grupo-muscular/nuevo-grupo-muscular.component';
 import { Subscription } from 'rxjs';
 
@@ -73,7 +72,7 @@ export class NuevoEjercicioComponent implements OnInit{
   }
 
   onChangeMgroup(event) {
-    this.m_group_id = event.value == undefined ? 0 : event.value;
+    this.m_group_id = event.detail.value == undefined ? 0 : event.detail.value;
   }
 
 }

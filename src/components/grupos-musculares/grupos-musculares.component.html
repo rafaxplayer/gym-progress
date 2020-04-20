@@ -1,8 +1,10 @@
 <div class="ion-padding">
-    <mat-action-list>
-        <mat-list-item *ngFor="let group of muscle_g" (click)="goActions(group)">
-            <mat-label>{{ group.name | titlecase }}</mat-label>
-            <mat-divider></mat-divider>
-        </mat-list-item>
-    </mat-action-list>
+    <ion-list lines="inset">
+        <ion-item *ngFor="let group of muscle_g" (click)="goActions(group)">
+            <ion-label>
+                {{ group.name | titlecase }}
+            </ion-label>
+            <div class="divider"></div>
+        </ion-item>
+    </ion-list>
 </div>

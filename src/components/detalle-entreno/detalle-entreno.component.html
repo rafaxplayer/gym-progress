@@ -1,38 +1,44 @@
-<mat-card class="ion-margin-bottom" @animacionItem>
-    <mat-card-header class="ion-padding-vertical ion-text-center">
-        <mat-label><b>{{ exerciseName | titlecase }} ({{ groupName | titlecase }})</b></mat-label>
-        <mat-label class="small-text ion-margin-vertical"><b>*{{ entreno.date | date:'d-M-yyy' }}* </b></mat-label>
-    </mat-card-header>
-    <mat-card-content class="ion-text-start">
+<ion-card @animacionItem>
+    <ion-card-header>
+      <ion-card-subtitle>- {{ entreno.date | date:'d-M-yyy' }} -</ion-card-subtitle>
+      <ion-card-title>{{ exerciseName | titlecase }} ({{ groupName | titlecase }})</ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="ion-margin-top">
         <ion-grid fixed>
-            <ion-row>
+            <ion-row class="small-text">
                 <ion-col>Kilos</ion-col>
                 <ion-col>Repeticiones</ion-col>
             </ion-row>
-            <mat-divider></mat-divider>
-            <ion-row class="ion-margin-top text-muted" *ngFor="let serie of series">
+            <div class="divider"></div>
+            <ion-row class="ion-margin-top text-muted small-text" *ngFor="let serie of series">
                 <ion-col>{{ serie.kgs }}</ion-col>
                 <ion-col>{{ serie.reps === 0 ? 'Fallo' : serie.reps }}</ion-col>
             </ion-row>
             <ion-row *ngIf="entreno.comment" class="ion-margin-vertical">
-                <mat-label class="small-text">Comentarios</mat-label>
+                <label class="small-text">Comentarios</label>
             </ion-row>
-            <mat-divider></mat-divider>
+            <div class="divider"></div>
             <ion-row *ngIf="entreno.comment" class="ion-margin-top">
                 <p class="text-muted ion-margin-top ion-text-start">{{ entreno.comment }}</p>
             </ion-row>
-
+            <div class="divider"></div>
+            <ion-row class="buttons">
+                <ion-col size="auto">
+                    <ion-button fill="clear" (click)="editTraining()">
+                        <ion-icon slot="icon-only" src="assets/svg-app/edit-outline.svg"></ion-icon>
+                    </ion-button>
+                </ion-col >
+                <ion-col size="auto">
+                    <ion-button fill="clear" (click)="deleteTraining()">
+                        <ion-icon slot="icon-only" src="assets/svg-app/delete-outline.svg"></ion-icon>
+                    </ion-button>
+                </ion-col>
+                <ion-col size="auto">
+                    <ion-button fill="clear" (click)="compareTraining()">
+                        <ion-icon slot="icon-only" src="assets/svg-app/search-outline.svg"></ion-icon>
+                    </ion-button>
+                </ion-col>
+            </ion-row>
         </ion-grid>
-    </mat-card-content>
-    <mat-card-actions class="ion-text-end">
-        <button mat-icon-button (click)="editTraining()">
-            <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button (click)="deleteTraining()">
-            <mat-icon>delete</mat-icon>
-        </button>
-        <button mat-icon-button (click)="compareTraining()">
-            <mat-icon>compare</mat-icon>
-        </button>
-    </mat-card-actions>
-</mat-card>
+    </ion-card-content>
+</ion-card>
