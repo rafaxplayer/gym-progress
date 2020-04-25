@@ -8,11 +8,8 @@ import { EntrenoPageRoutingModule } from './entreno-routing.module';
 
 import { EntrenoPage } from './entreno.page';
 import { ComponentsModule } from 'src/components/components.module';
-
-/* Material */
-import { MatIconModule, MatButtonModule, MatSelectModule, MatDividerModule, MatInputModule, MatFormFieldModule, MatDatepickerModule, MatNativeDateModule } from '@angular/material/';
 import { CanDeactivateGuard } from 'src/services/can-deactivate-guard.service';
-
+import {HideButtonDirective} from '../../directives/hide-button.directive'
 @NgModule({
   imports: [
     CommonModule,
@@ -20,16 +17,9 @@ import { CanDeactivateGuard } from 'src/services/can-deactivate-guard.service';
     IonicModule,
     EntrenoPageRoutingModule,
     ComponentsModule,
-    MatIconModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatDividerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule
+    
   ],
-  declarations: [EntrenoPage],
+  declarations: [EntrenoPage,HideButtonDirective],
   providers: [CanDeactivateGuard]
 })
 export class EntrenoPageModule {}

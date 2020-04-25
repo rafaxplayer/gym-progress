@@ -26,10 +26,6 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-/* Material theme css */
-
-@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
-
 ion-content{
 	--background:#2d2b2b url(assets/back.jpg) no-repeat center/cover fixed;
 }
@@ -91,8 +87,7 @@ ion-label{
         width: auto !important;
     }
 }
-.divider:after,
-.action-sheet-button:after{
+.divider:after{
 	content: "";
     width: 98%;
     height: 0.3px;
@@ -103,16 +98,33 @@ ion-label{
 }
 
 /* action shet styles*/
-.action-shett-custom-css {
-	--background: var(--ion-background-color);
-	--color: var(--ion-text-color);
-	--background-selected: var(--ion-color-primary-tint);
-	--background-activated: var(--ion-color-primary-tint);
+ion-action-sheet {
+	--backdrop-opacity:.8;
+	--background: var(--ion-background-color) !important;
+	--color: var(--ion-text-color) !important;
+	--background-selected: var(--ion-color-primary-tint) !important;
+	--background-activated: var(--ion-color-primary-tint) !important;
 	.action-sheet-title{
 		background-color: #101010;
 		border-top:2px solid var(--ion-color-primary-shade);
-		height: auto;
+		height: auto !important;
 	}
+	
+	.action-sheet-button:after{
+			content: "";
+			width: 98%;
+			height: 0.3px;
+			display: block;
+			background-color: #eae4e454;
+			margin-left: auto;
+			margin-right: auto;
+			bottom:0;
+	}
+	.action-sheet-button{
+		contain:none !important;
+		overflow: visible !important;
+	}
+	
 }
 /* end*/
 
@@ -121,20 +133,21 @@ ion-label{
 	--background: var(--ion-background-color,#2d2b2b);
     --border-width: 1.55px 0 0;
     --border-color: var(--ion-color-primary-shade,#ab1550);
-    color: var(--ion-color-medium-shade,#86888f);
+    --color: var(--ion-color-medium-shade,#86888f);
 }
 .picker-toolbar {
     background: #303030 !important;
     margin-bottom: 15px;
 }
 /* end */
-
+/* modals styles*/
 .modal-style {
 	--border-radius: 10px;
 	--width:300px;
 	--max-width: 90%;
 	--max-height: 80%;
-	--background: var(--ion-color-secondary);
+	color:white;
+	--background: var(--ion-background-color,#2d2b2b);
 	overflow-y: scroll;
 }
 
@@ -147,7 +160,37 @@ ion-label{
 .modal-style .modal-wrapper.sc-ion-modal-md {
 	box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
 }
+/*end*/
 
+/* alert styles*/
+.alert-wrapper{
+	background: var(--ion-color-background);
+	.alert-head{
+		:after {
+			content: "";
+			width: 98%;
+			height: .1px;
+			background: #6d6a6a;
+			bottom: 0;
+			display: block;
+			margin-top: 10px;
+		}
+		.alert-title{
+			font-size: 14px !important;
+		}
+	}
+	.alert-message{
+		font-size: 12px !important;
+	}
+}
+.alertButton{
+	color: var(--ion-color-primary);
+	:hover{
+		background-color:var(--ion-color-primary-tint);
+	}
+}
+
+/*end */
 .monthview-selected {
 	background-color: var(--ion-color-dark-tint) !important;
 }
@@ -190,14 +233,16 @@ ion-label{
 .alert-message {
 	color: var(--ion-text-color) !important;
 }
-
+/* fab buttons*/
 .fab-button {
 	position: fixed;
 	right: 5%;
 	bottom: 5%;
 	z-index: 999999;
+	transition: all .8s;
+	
 }
-
+/* end*/
 .title_border {
 	border: 2px solid white;
 	text-transform: uppercase;

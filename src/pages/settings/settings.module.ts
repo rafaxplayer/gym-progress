@@ -5,9 +5,6 @@ import { IonicModule } from '@ionic/angular';
 import { SettingsPageRoutingModule } from './settings-routing.module';
 import { SettingsPage } from './settings.page';
 import { ComponentsModule } from '../../components/components.module';
-import { MatExpansionModule, MatButtonModule } from '@angular/material';
-import { MatSelectModule, MatIconModule, MatDividerModule } from '@angular/material/';
-
 
 @NgModule({
   imports: [
@@ -15,13 +12,7 @@ import { MatSelectModule, MatIconModule, MatDividerModule } from '@angular/mater
     FormsModule,
     IonicModule,
     SettingsPageRoutingModule,
-    ComponentsModule,
-    MatExpansionModule,
-    MatSelectModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDividerModule
-    
+    ComponentsModule    
   ],
   declarations: [SettingsPage]
 })

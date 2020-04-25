@@ -1,7 +1,7 @@
 <ion-card @animacionItem>
     <ion-card-header>
       <ion-card-subtitle>- {{ entreno.date | date:'d-M-yyy' }} -</ion-card-subtitle>
-      <ion-card-title>{{ exerciseName | titlecase }} ({{ groupName | titlecase }})</ion-card-title>
+      <ion-card-title>{{ entreno.exercise_name | titlecase }} ({{ entreno.muscle_name | titlecase }})</ion-card-title>
     </ion-card-header>
     <ion-card-content class="ion-margin-top">
         <ion-grid fixed>

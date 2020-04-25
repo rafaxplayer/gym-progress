@@ -1,6 +1,6 @@
 import { Training } from './../../services/database.service';
 import { Component, OnInit, Input } from '@angular/core';
-import { DatabaseService, Muscle_Group, Exercise} from '../../services/database.service';
+import { DatabaseService, Muscle_Group, Exercise } from '../../services/database.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogsService } from './../../services/dialogs.service';
 import { Subscription } from 'rxjs';
@@ -9,80 +9,95 @@ import { Subscription } from 'rxjs';
   selector: 'app-compare-dates',
   templateUrl: './compare-dates.page.html'
 })
-export class CompareDatesPage implements OnInit {
+export class CompareDatesPage {
 
-  entreno:Training;
+  entreno: Training;
 
-  group_id:number=0;
+  group_id: number = 0;
 
-  exercise_id:number=0;
+  exercise_id: number = 0;
 
-  entrenos:Training[]=[];
+  entrenos: Training[] = [];
 
-  m_groups:Muscle_Group[]=[];
+  m_groups: Muscle_Group[] = [];
 
-  exercises:Exercise[]=[];
+  exercises: Exercise[] = [];
 
-  subscriptions:Subscription[]=[];
+  subscriptions: Subscription[] = [];
 
-  constructor(private database:DatabaseService,private activatedRoute: ActivatedRoute, private router: Router, private dialogsService: DialogsService) { 
+  eventsPropagation = 0;
+
+  constructor(private database: DatabaseService, private activatedRoute: ActivatedRoute, private router: Router, private dialogsService: DialogsService) {
 
     this.activatedRoute.queryParams.subscribe(params => {
-      
-      if(params.training){
-        this.entreno = JSON.parse(params.training); 
+
+      if (params.training) {
+        this.entreno = JSON.parse(params.training);
       }
     });
   }
 
-  ngOnInit() {
-    if(this.entreno){
-      this.database.getTrainingsWithExercise(this.entreno.exercise_id);
-    }
-  }
+  ionViewWillEnter() {
+    console.log('ionViewWillEnter');
 
-  ionViewWillEnter(){
-    this.subscriptions.push(this.database.getMuscleGroups().subscribe((mgs:Muscle_Group[])=>{
+    this.subscriptions.push(this.database.getMuscleGroups().subscribe((mgs: Muscle_Group[]) => {
       this.m_groups = mgs;
     }));
-    
-    this.subscriptions.push(this.database.getExercises().subscribe((exers:Exercise[])=>{
+
+    this.subscriptions.push(this.database.getExercises().subscribe((exers: Exercise[]) => {
       this.exercises = exers;
     }));
 
-    this.subscriptions.push(this.database.getTrainings().subscribe((trs:Training[])=>{
+    this.subscriptions.push(this.database.getTrainings().subscribe((trs: Training[]) => {
       this.entrenos = trs;
     }));
-  }
 
-  ionViewDidLeave(): void {
-    this.subscriptions.forEach((subs) =>{
-      subs.unsubscribe();
-    });
-  }
-    
-  onChangeMgroup($event:any){
-    this.group_id = $event.value;
-    if(this.group_id > 0){
-      this.database.loadExercises($event.value);
-      if(this.exercise_id > 0){
-        this.searchTrainings(this.group_id,this.exercise_id);
-      }
+    if (this.entreno) {
+
+      this.eventsPropagation = 0;
+      this.group_id = this.entreno.muscle_group_id
+      this.exercise_id = this.entreno.exercise_id
+      this.searchTrainings(this.group_id, this.exercise_id);
+
     }
   }
 
-  onChangeExercise($event:any){
-    this.exercise_id = $event.value;
-    this.searchTrainings( this.group_id, this.exercise_id );
+  ionViewDidLeave(): void {
+    this.subscriptions.forEach((subs) => {
+      subs.unsubscribe();
+    });
+
   }
-  
-  searchTrainings(group_id:number,exercise_id:number){
-    if(this.exercise_id > 0 && this.group_id > 0){
-      this.database.searchTrainingsWithExerciseAndGroup( group_id, exercise_id ).then((trs:Training[])=>{
-       this.entrenos = trs;
+
+  onChangeMgroup($event: any) {
+
+    if (this.eventsPropagation > 0) {
+      if ($event.detail.value != undefined) {
+        this.group_id = $event.detail.value;
+        this.database.loadExercises(this.group_id);
+        this.searchTrainings(this.group_id, this.exercise_id);
+      }
+    }
+
+  }
+
+  onChangeExercise($event: any) {
+    if (this.eventsPropagation > 0) {
+      if ($event.detail.value != undefined) {
+        this.exercise_id = $event.detail.value;
+        this.searchTrainings(this.group_id, this.exercise_id);
+      }
+    }
+    this.eventsPropagation = 1;
+  }
+
+  searchTrainings(group_id: number, exercise_id: number) {
+    if (group_id > 0 && exercise_id > 0) {
+      this.database.searchTrainingsWithExerciseAndGroup(group_id, exercise_id).then((trs: Training[]) => {
+        this.entrenos = trs;
       });
-    }else{
-      this.dialogsService.dialogOk('Error','Debes establecer un grupo y un ejercicio','Cerrar');
+    } else {
+      this.dialogsService.dialogOk('Error', 'Debes establecer un grupo y un ejercicio', 'Cerrar');
     }
   }
 }

@@ -19,13 +19,14 @@ export class DialogsService {
           {
             text: cancelText,
             role: 'cancel',
-            cssClass: 'secondary',
+            cssClass: 'alertButton',
             handler: (cancel) => {
               resolve('cancel');
               alert.dismiss();
             }
           }, {
             text: okText,
+            cssClass: 'alertButton',
             handler: (ok) => {
               resolve('ok');
             }
@@ -44,6 +45,7 @@ export class DialogsService {
         buttons: [
           {
             text: okText,
+            cssClass: 'alertButton',
             handler: (ok) => {
               resolve('ok');
               alert.dismiss();

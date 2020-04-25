@@ -8,12 +8,13 @@ import { ImagePicker } from '@ionic-native/image-picker/ngx';
   templateUrl: './nuevo-grupo-muscular.component.html'
 })
 export class NuevoGrupoMuscularComponent {
-
+ 
   groupId: number = 0;
 
   groupName: string = "";
 
   groupImg: string = "assets/muscle-img/muscle_placeholder.png";
+
 
   constructor(private database: DatabaseService, private dialogsService: DialogsService, private imgPicker: ImagePicker) { }
 

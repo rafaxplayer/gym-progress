@@ -23,6 +23,7 @@ import { UtilsService } from '../services/utils.service';
 import { EventsService } from '../services/events.service';
 
 import { registerLocaleData } from '@angular/common';
+
 import localeZh from '@angular/common/locales/es';
 
 registerLocaleData(localeZh);

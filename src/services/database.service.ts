@@ -22,7 +22,9 @@ export interface Training {
   id: number,
   date: string,
   muscle_group_id: number,
+  muscle_name: string,
   exercise_id: number,
+  exercise_name: string,
   series: string,
   comment: string
 }
@@ -34,7 +36,6 @@ export class DatabaseService {
 
   private database: SQLiteObject;
   private dbReady = new BehaviorSubject<boolean>(false);
-
   private trainings$ = new BehaviorSubject([]);
   private muscle_groups$ = new BehaviorSubject([]);
   private exercises$ = new BehaviorSubject([]);
@@ -50,7 +51,7 @@ export class DatabaseService {
 
           this.database = db
           this.seedDatabase()
-          
+
         }).catch(e => console.log('Error executing creation SQL: ' + JSON.stringify(e)));
 
     });
@@ -61,16 +62,16 @@ export class DatabaseService {
       .subscribe(sql => {
         this.sqlitePorter.importSqlToDb(this.database, sql)
           .then(_ => {
-            this.database.executeSql(`CREATE TRIGGER IF NOT EXISTS delete_muscle_group AFTER DELETE ON muscle_groups FOR EACH ROW BEGIN DELETE FROM exercises WHERE muscle_group_id = OLD.id; DELETE FROM trainings WHERE trainings.muscle_group_id = OLD.id;END;`, []);     
+            this.database.executeSql(`CREATE TRIGGER IF NOT EXISTS delete_muscle_group AFTER DELETE ON muscle_groups FOR EACH ROW BEGIN DELETE FROM exercises WHERE muscle_group_id = OLD.id; DELETE FROM trainings WHERE trainings.muscle_group_id = OLD.id;END;`, []);
             this.dbReady.next(true);
             this.loadAll();
           }).catch(e => console.log('Error import Database SqlitePorter: ' + JSON.stringify(e)));
-          
+
       });
   }
- 
-  
- private isReady() {
+
+
+  private isReady() {
     return new Promise((resolve, reject) => {
       //if dbReady is true, resolve
       if (this.dbReady.getValue()) {
@@ -111,11 +112,15 @@ export class DatabaseService {
    *
    */
   loadTrainings(date: string = this.utils.formatYMD(new Date())) {
-    var query = 'SELECT id, date, muscle_group_id, exercise_id, series, comment FROM trainings WHERE date = ? ORDER BY date DESC';
+    var query = `SELECT trainings.id,trainings.date,trainings.series,trainings.exercise_id,trainings.muscle_group_id,muscle_groups.name AS muscle_name,exercises.name AS exercise_name FROM trainings 
+    LEFT JOIN muscle_groups ON trainings.muscle_group_id = muscle_groups.id 
+    LEFT JOIN exercises ON trainings.exercise_id = exercises.id 
+    WHERE date = ?
+    ORDER BY trainings.date DESC`;
     this.isReady().then(() => {
       return this.database.executeSql(query, [date]).then(data => {
         let trainings: Training[] = [];
-       
+
         if (data.rows.length > 0) {
           for (var i = 0; i < data.rows.length; i++) {
             trainings.push({
@@ -124,35 +129,14 @@ export class DatabaseService {
               muscle_group_id: data.rows.item(i).muscle_group_id,
               exercise_id: data.rows.item(i).exercise_id,
               series: data.rows.item(i).series,
-              comment: data.rows.item(i).comment
+              comment: data.rows.item(i).comment,
+              muscle_name: data.rows.item(i).muscle_name,
+              exercise_name: data.rows.item(i).exercise_name
             });
           }
         }
 
         this.trainings$.next(trainings);
-      });
-    });
-  }
-
-  getAllTrainings() {
-    var query = 'SELECT * FROM trainings ';
-    return this.isReady().then(() => {
-      return this.database.executeSql(query, []).then(data => {
-        let trainings: any[] = [];
-        if (data.rows.length > 0) {
-          for (var i = 0; i < data.rows.length; i++) {
-            trainings.push({
-              date: data.rows.item(i).date,
-              id: data.rows.item(i).id,
-              muscle_group_id: data.rows.item(i).muscle_group_id,
-              exercise_id: data.rows.item(i).exercise_id,
-              series: data.rows.item(i).series,
-              comment: data.rows.item(i).comment
-
-            });
-          }
-        }
-        return trainings;
       });
     });
   }
@@ -179,34 +163,24 @@ export class DatabaseService {
     return this.trainings$.asObservable();
   }
 
-
-  getTrainingsWithExercise(exercixe_id: number) {
-    var query = 'SELECT id, date, muscle_group_id, exercise_id, series, comment FROM trainings WHERE exercise_id = ? ORDER BY date DESC';
-    return this.isReady().then(() => {
-      return this.database.executeSql(query, [exercixe_id]).then(data => {
-        let trainings: Training[] = [];
-        if (data.rows.length > 0) {
-          for (var i = 0; i < data.rows.length; i++) {
-            trainings.push({
-              date: data.rows.item(i).date,
-              id: data.rows.item(i).id,
-              muscle_group_id: data.rows.item(i).muscle_group_id,
-              exercise_id: data.rows.item(i).exercise_id,
-              series: data.rows.item(i).series,
-              comment: data.rows.item(i).comment
-            });
-          }
-        }
-        this.trainings$.next(trainings);
-      }).catch(e => console.log('Error executing creation SQL: ' + JSON.stringify(e)));
-    });
-  }
-
+  /* admite busqueda con grupo y ejercicio o solo uno de ellos*/
   searchTrainingsWithExerciseAndGroup(group_id: number, exercixe_id: number): Promise<Training[]> {
-    var query = 'SELECT id, date, muscle_group_id, exercise_id, series, comment FROM trainings WHERE muscle_group_id = ? AND exercise_id = ? ORDER BY date DESC';
+    let clausule = `WHERE trainings.muscle_group_id = ${group_id} AND trainings.exercise_id = ${exercixe_id}`
+    if (!(group_id > 0) && exercixe_id > 0) {
+      clausule = `WHERE trainings.exercise_id = ${exercixe_id}`
+    } else if (group_id > 0 && !(exercixe_id > 0)) {
+      clausule = `WHERE trainings.muscle_group_id = ${group_id}`
+    }
+    var query = `SELECT trainings.id, trainings.date, trainings.series, trainings.exercise_id, trainings.muscle_group_id, muscle_groups.name AS muscle_name,exercises.name AS exercise_name FROM trainings 
+    LEFT JOIN muscle_groups ON trainings.muscle_group_id = muscle_groups.id 
+    LEFT JOIN exercises ON trainings.exercise_id = exercises.id 
+    ${clausule} 
+    ORDER BY trainings.date DESC`;
+    console.log(query)
     return this.isReady().then(() => {
-      return this.database.executeSql(query, [group_id, exercixe_id]).then(data => {
+      return this.database.executeSql(query,[]).then(data => {
         let trainings: Training[] = [];
+        console.log(data.rows.length)
         if (data.rows.length > 0) {
           for (var i = 0; i < data.rows.length; i++) {
             trainings.push({
@@ -215,7 +189,9 @@ export class DatabaseService {
               muscle_group_id: data.rows.item(i).muscle_group_id,
               exercise_id: data.rows.item(i).exercise_id,
               series: data.rows.item(i).series,
-              comment: data.rows.item(i).comment
+              comment: data.rows.item(i).comment,
+              muscle_name: data.rows.item(i).muscle_name,
+              exercise_name: data.rows.item(i).exercise_name
             });
           }
         }
@@ -223,9 +199,13 @@ export class DatabaseService {
       });
     });
   }
-  
+  T3WB
   searchTrainingsWithDateRange(initDate: any, endDate: any): Promise<Training[]> {
-    var query = 'SELECT id, date, muscle_group_id, exercise_id, series, comment FROM trainings WHERE DATE(date) BETWEEN ? AND ? ORDER BY date DESC';
+    var query = `SELECT trainings.id, trainings.date, trainings.series, trainings.exercise_id, trainings.muscle_group_id, muscle_groups.name AS muscle_name,exercises.name AS exercise_name FROM trainings 
+    LEFT JOIN muscle_groups ON trainings.muscle_group_id = muscle_groups.id 
+    LEFT JOIN exercises ON trainings.exercise_id = exercises.id 
+    WHERE DATE(trainings.date) BETWEEN ? AND ? 
+    ORDER BY trainings.date DESC`;
     return this.isReady().then(() => {
       return this.database.executeSql(query, [initDate, endDate]).then(data => {
         let trainings: Training[] = [];
@@ -237,7 +217,9 @@ export class DatabaseService {
               muscle_group_id: data.rows.item(i).muscle_group_id,
               exercise_id: data.rows.item(i).exercise_id,
               series: data.rows.item(i).series,
-              comment: data.rows.item(i).comment
+              comment: data.rows.item(i).comment,
+              muscle_name: data.rows.item(i).muscle_name,
+              exercise_name: data.rows.item(i).exercise_name
             });
           }
         }
@@ -297,9 +279,14 @@ export class DatabaseService {
   loadExercises(muscle_g_id: number = 0) {
 
     this.isReady().then(() => {
-      let query = `SELECT exercises.id, exercises.name, exercises.muscle_group_id, muscle_groups.name AS muscle_name FROM exercises INNER JOIN muscle_groups ON exercises.muscle_group_id = muscle_groups.id ORDER BY exercises.name`;
+      let query = `SELECT exercises.id, exercises.name, exercises.muscle_group_id, muscle_groups.name AS muscle_name FROM exercises 
+      INNER JOIN muscle_groups ON exercises.muscle_group_id = muscle_groups.id 
+      ORDER BY exercises.name`;
       if (muscle_g_id > 0) {
-        query = `SELECT exercises.id, exercises.name, exercises.muscle_group_id, muscle_groups.name AS muscle_name FROM exercises INNER JOIN muscle_groups ON exercises.muscle_group_id = muscle_groups.id WHERE exercises.muscle_group_id=${ muscle_g_id } ORDER BY exercises.name`;
+        query = `SELECT exercises.id, exercises.name, exercises.muscle_group_id, muscle_groups.name AS muscle_name FROM exercises 
+        INNER JOIN muscle_groups ON exercises.muscle_group_id = muscle_groups.id 
+        WHERE exercises.muscle_group_id=${ muscle_g_id} 
+        ORDER BY exercises.name`;
       }
 
       return this.database.executeSql(query, []).then(data => {
@@ -417,7 +404,7 @@ export class DatabaseService {
     return this.isReady().then(() => {
       let query = `DELETE FROM ${tableName} WHERE id = ?`;
       return this.database.executeSql(query, [id]).then((data) => {
-        
+
         this.reloadData(tableName, date);
       });
     })

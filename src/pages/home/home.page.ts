@@ -18,6 +18,8 @@ export class HomePage implements OnInit {
 
   @ViewChild(CalendarComponent, null) myCalendar: CalendarComponent;
 
+  @ViewChild('entrenosContent', null) entrenosContent: ElementRef;
+
   buttonUp: any;
 
   isToday: boolean;
@@ -40,7 +42,7 @@ export class HomePage implements OnInit {
 
   subscriptionTraining: Subscription;
 
-  constructor(private platform: Platform, private navCtrl: NavController, private element: ElementRef, private renderer: Renderer2, private database: DatabaseService, private utilsService: UtilsService) { }
+  constructor(private platform: Platform, private navCtrl: NavController, private element: ElementRef, private renderer: Renderer2, private database: DatabaseService, public utilsService: UtilsService) { }
 
   ngOnInit(): void {
     this.subscriptionTraining = this.database.getTrainings().subscribe((trs: Training[]) => {
@@ -79,20 +81,7 @@ export class HomePage implements OnInit {
     }
 
   }
-
-  scrollToElement(element: string): void {
-    if (this.entrenos.length > 0) {
-      let yOffset = document.getElementById(element).offsetTop;
-      setTimeout(() => {
-        this.content.scrollToPoint(0, yOffset, 2000);
-      }, 500)
-    }
-  }
-
-  scrollToTop(): void {
-    this.content.scrollToTop(600);
-  }
-
+    
   newTraining() {
     let navigationExtras: NavigationExtras = {
       queryParams: {
@@ -112,7 +101,9 @@ export class HomePage implements OnInit {
   onCurrentDateChanged($event: Date) {
     this.currentDate = $event;
     this.database.loadTrainings(this.utilsService.formatYMD($event));
-    this.scrollToElement("entrenos-content");
+    if(this.entrenos.length > 0){
+      this.utilsService.scrollToElement(this.content,this.entrenosContent);
+    }
     this.isToday = this.isDateToday($event)
 
   };

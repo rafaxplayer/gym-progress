@@ -22,6 +22,7 @@ export class EjerciciosComponent implements OnInit{
   constructor(private database:DatabaseService,private dialogsService:DialogsService, private dialogService:DialogsService,public actionSheetContrl: ActionSheetController) { }
 
   ngOnInit(){
+    
     this.database.loadExercises();
     
     this.subscriptions.push(this.database.getExercises().subscribe((ex: Exercise[]) => {
@@ -55,9 +56,10 @@ export class EjerciciosComponent implements OnInit{
     const actionSheet = await this.actionSheetContrl.create({
       header: `Acciones para "${ex.name}"`,
       cssClass:'action-shett-custom-css',
+      backdropDismiss:true,
+    
       buttons: [{
         text: 'Eliminar',
-        role: 'destructive',
         icon: 'trash',
         handler: () => {
           this.dialogService.dialogConfirm(`Eliminar ${ex.name}`,`¿Seguro quieres eliminar ${ex.name}?`,'Cancelar','Ok').then( res =>{
@@ -75,13 +77,6 @@ export class EjerciciosComponent implements OnInit{
         handler: () => {
           this.showModal(ex);
           
-        }
-      }, {
-        text: 'Cancel',
-        icon: 'close',
-        role: 'cancel',
-        handler: () => {
-          actionSheet.dismiss();
         }
       }]
     });

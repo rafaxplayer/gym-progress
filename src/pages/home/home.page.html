@@ -1,5 +1,5 @@
 <app-header></app-header>
-<ion-content #content [scrollEvents]="true" (ionScroll)="logScrolling($event)">
+<ion-content #content>
     <div class="ion-padding ion-text-center">
         <ion-button [disabled]="isToday" color="dark" (click)="today()">
             <ion-icon slot="start" src="assets/svg-app/today-outline.svg"></ion-icon>
@@ -14,14 +14,14 @@
             [startingDayMonth]="1">
         </calendar>
     </div>
-    <div id="entrenos-content" class="ion-padding ion-margin-bottom ion-text-center">
+    <div #entrenosContent class="ion-padding ion-margin-bottom ion-text-center">
         <label *ngIf="entrenos.length > 0" class="title_border ion-margin-bottom">Entrenos</label>
         <detalle-entreno *ngFor="let entreno of entrenos" [entreno]="entreno"></detalle-entreno>
     </div>
-    <ion-button #buttonUp icon-only class="arrou-up-button" (click)="scrollToTop()">
+    <ion-button #buttonUp icon-only class="arrou-up-button" (click)="utilsService.scrollToTop(content,600)">
         <ion-icon name="arrow-up"></ion-icon>
     </ion-button>
-    <ion-fab-button class="fab-button" color="primary" (click)="newTraining()">
+    <ion-fab-button #fabButton class="fab-button" color="primary" (click)="newTraining()">
         <ion-icon name="add"></ion-icon>
     </ion-fab-button>
 </ion-content>

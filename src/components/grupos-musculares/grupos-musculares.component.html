@@ -1,6 +1,9 @@
 <div class="ion-padding">
     <ion-list lines="inset">
         <ion-item *ngFor="let group of muscle_g" (click)="goActions(group)">
+            <ion-avatar slot="start">
+                <img src="{{group.img}}"/>
+            </ion-avatar>
             <ion-label>
                 {{ group.name | titlecase }}
             </ion-label>

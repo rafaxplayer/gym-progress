@@ -11,10 +11,6 @@ import { EjerciciosComponent } from './ejercicios/ejercicios.component';
 import { EntrenosComponent } from './entrenos/entrenos.component';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
 
-/* Material */
-import { MatToolbarModule, MatIconModule, MatButtonModule, MatCardModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatListModule, MatSelectModule, MatDatepickerModule,
-  MatNativeDateModule} from '@angular/material/';
-
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -28,20 +24,9 @@ import { MatToolbarModule, MatIconModule, MatButtonModule, MatCardModule, MatDiv
   imports: [
     CommonModule,
     IonicModule ,
-    FormsModule,
-    MatToolbarModule, 
-    MatIconModule, 
-    MatButtonModule,
-    MatCardModule,
-    MatDividerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatListModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule
+    FormsModule
   ],
-  entryComponents:[NuevoGrupoMuscularComponent, NuevoEjercicioComponent, EntrenosComponent],
+  entryComponents:[NuevoGrupoMuscularComponent, NuevoEjercicioComponent, EntrenosComponent,DetalleEntrenoComponent],
   exports: [
     HeaderComponent,
     NuevoEjercicioComponent,

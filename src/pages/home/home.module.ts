@@ -8,8 +8,6 @@ import { HomePage } from './home.page';
 import { NgCalendarModule } from 'ionic2-calendar';
 import { ComponentsModule } from '../../components/components.module';
 
-/* Material */
-import { MatIconModule, MatButtonModule, MatListModule, MatDividerModule} from '@angular/material/';
 @NgModule({
  
   imports: [
@@ -23,12 +21,8 @@ import { MatIconModule, MatButtonModule, MatListModule, MatDividerModule} from '
       }
   ]),
   NgCalendarModule,
-  ComponentsModule,
-  MatIconModule, 
-  MatButtonModule,
-  MatListModule,
-  MatDividerModule
-  ],
+  ComponentsModule
+],
   
   declarations: [HomePage]
 })

@@ -5,7 +5,6 @@ import { IonicModule } from '@ionic/angular';
 import { CompareDatesPageRoutingModule } from './compare-dates-routing.module';
 import { CompareDatesPage } from './compare-dates.page';
 import { ComponentsModule } from 'src/components/components.module';
-import { MatCardModule, MatFormFieldModule, MatSelectModule } from '@angular/material/';
 
 @NgModule({
   imports: [
@@ -13,10 +12,7 @@ import { MatCardModule, MatFormFieldModule, MatSelectModule } from '@angular/mat
     FormsModule,
     IonicModule,
     CompareDatesPageRoutingModule,
-    ComponentsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatSelectModule
+    ComponentsModule
   ],
   declarations: [CompareDatesPage]
 })

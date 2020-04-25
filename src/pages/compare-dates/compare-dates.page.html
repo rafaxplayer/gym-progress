@@ -1,24 +1,22 @@
 <app-header></app-header>
 <ion-content class="ion-padding">
-    <mat-card class="ion-margin-bottom">
-        <mat-card-header>
-            <mat-card-title>Buscar ejercicio</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <mat-form-field appearance="legacy" class="ion-padding">
-                <mat-label position="stacked">Grupo Muscular</mat-label>
-                <mat-select (selectionChange)="onChangeMgroup($event)" placeholder="Selecciona un Grupo muscular">
-                    <mat-option *ngFor="let gr of m_groups" [value]="gr.id">{{ gr.name | titlecase }}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field appearance="legacy" class="ion-padding">
-                <mat-label position="stacked">Nombre del ejercicio</mat-label>
-                <mat-select (selectionChange)="onChangeExercise($event)" placeholder="Selecciona un Grupo muscular">
-                    <mat-option *ngFor="let ex of exercises" [value]="ex.id">{{ ex.name | titlecase }}</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </mat-card-content>
-    </mat-card>
+    <ion-card class="ion-margin-bottom">
+        <ion-card-header>
+            <ion-card-title>Buscar ejercicio</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            
+            <ion-label position="stacked" class="tiny-text">Grupo Muscular</ion-label>
+            <ion-select placeholder="Selecciona un Grupo muscular" value={{group_id}} multiple="false" interface="action-sheet" (ionChange)="onChangeMgroup($event)">
+                <ion-select-option *ngFor="let gr of m_groups" value="{{gr.id}}">{{ gr.name | titlecase }}</ion-select-option>
+            </ion-select>
+            
+            <ion-label position="stacked" class="tiny-text">Ejercicio</ion-label>
+            <ion-select placeholder="Seleciona Ejercicio" multiple="false" value="{{exercise_id}}" interface="action-sheet" (ionChange)="onChangeExercise($event)">
+                <ion-select-option *ngFor="let ex of exercises" value="{{ex.id}}">{{ ex.name | titlecase }}</ion-select-option>
+            </ion-select>
+        </ion-card-content>
+    </ion-card>
 
     <detalle-entreno *ngFor="let entreno of entrenos" [entreno]="entreno"></detalle-entreno>
 </ion-content>
